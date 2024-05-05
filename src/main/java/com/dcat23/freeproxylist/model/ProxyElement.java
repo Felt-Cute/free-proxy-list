@@ -1,11 +1,11 @@
 package com.dcat23.freeproxylist.model;
 
 import com.dcat23.freeproxylist.dto.Anonymity;
+import com.dcat23.freeproxylist.dto.ProxyResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -15,7 +15,7 @@ public class ProxyElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 16, unique = true)
+    @Column(unique = true)
     private String ipAddress;
     private int port;
     @Column(length = 2)
@@ -27,6 +27,12 @@ public class ProxyElement {
     private boolean google;
     private boolean https;
     private LocalDateTime lastChecked;
+
+    public String getUrl() throws MalformedURLException {
+        String protocol = "http" + (https ? "s" : "");
+        return new URL(protocol, ipAddress, port, "")
+                .toString();
+    }
 
     public void setLastChecked(String lastChecked) {
         String[] split = lastChecked.split(" ");
@@ -45,9 +51,25 @@ public class ProxyElement {
     public void setIpAddress(String ipAddress) {
         try {
             this.ipAddress = InetAddress.getByName(ipAddress)
-                    .toString();
+                    .getHostName();
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ProxyResponse asResponse() {
+        String url;
+        try {
+            url = getUrl();
+        } catch (MalformedURLException e) {
+            url = ipAddress;
+        }
+        return new ProxyResponse(
+          ipAddress,
+          code,
+          country,
+          anonymity,
+          url
+        );
     }
 }
