@@ -5,5 +5,6 @@ public record ProxyResponse(
         String code,
         String country,
         Anonymity tier,
+        int port,
         String url
 ) { }

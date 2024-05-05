@@ -4,9 +4,8 @@
 [![Current Version](https://img.shields.io/badge/version-0.0.2-green.svg)](https://github.com/felt-cute/free-proxy-list)
 [![Live Demo](https://img.shields.io/badge/demo-offline-red.svg)](https://igorantun.com/chat)
 
-Free list of proxies.  Spring application
-
 ---
+Generates a reponse with a list of free use proxy urls.
 
 ## Technologies
 Project is created with:
@@ -44,12 +43,11 @@ docker compose up -d
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project with docker, you will need to add the following environment variables to your .env file
 
-- `MYSQL_DATABASE`
-- `MYSQL_PASSWORD`
-- `MYSQL_ROOT_PASSWORD`
-- `MYSQL_USER`
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `POSTGRES_DATABASE`
 
 ---
 

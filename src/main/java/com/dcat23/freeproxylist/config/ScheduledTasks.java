@@ -1,7 +1,6 @@
 package com.dcat23.freeproxylist.config;
 
 import com.dcat23.freeproxylist.service.ProxyService;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ScheduledTasks {
 
-    private static final long ONE_SECOND = 1000;
-    private static final long ONE_MINUTE = 60_000L;
     private static final long ONE_HOUR = 3_600_000L;
 
     private final ProxyService service;

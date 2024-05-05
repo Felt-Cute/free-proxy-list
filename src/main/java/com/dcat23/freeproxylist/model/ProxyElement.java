@@ -69,6 +69,7 @@ public class ProxyElement {
           code,
           country,
           anonymity,
+          port,
           url
         );
     }
