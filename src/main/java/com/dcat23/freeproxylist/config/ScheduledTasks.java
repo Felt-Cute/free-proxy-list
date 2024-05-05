@@ -35,8 +35,13 @@ public class ScheduledTasks {
     /**
      * 3600000 milliseconds = 1 hour
      */
-    @Scheduled(fixedRate = (ONE_HOUR))
-    public void updateHourly() {
+//    @Scheduled(fixedRate = (ONE_HOUR))
+//    public void updateHourly() {
+//        service.fetch();
+//    }
+
+    @Scheduled(fixedRate = (ONE_HOUR / 6))
+    public void updateEveryTenMinutes() {
         service.fetch();
     }
 }

@@ -15,7 +15,7 @@ public class ProxyElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 15, unique = true)
+    @Column(length = 16, unique = true)
     private String ipAddress;
     private int port;
     @Column(length = 2)

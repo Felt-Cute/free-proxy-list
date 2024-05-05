@@ -1,14 +1,1 @@
-server:
-  port: 8080
-spring:
-  application:
-    name: free-proxy-list
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    password: password
-    url: jdbc:mysql://localhost:3307/fpl
-    username: root
+server:  port: 8080spring:  application:    name: free-proxy-list  jpa:    hibernate:      ddl-auto: create-drop    show-sql: false  datasource:    driver-class-name: com.mysql.cj.jdbc.Driver    url: jdbc:mysql://localhost:3307/fpl    password: password    username: root
