@@ -44,7 +44,7 @@ public class Scraper {
     }
 
     static HtmlPage getPage() {
-        HtmlPage page = null;
+        HtmlPage page;
         try(WebClient client = Scraper.webClient())
         {
             page = client.getPage(BASE_URL);
