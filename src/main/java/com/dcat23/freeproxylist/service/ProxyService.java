@@ -27,8 +27,8 @@ public class ProxyService {
                 .stream()
                 .map(this::checkExists)
                 .toList();
-        repo.saveAll(proxies);
-        log.info("Fetched proxies");
+        List<ProxyElement> saved = repo.saveAll(proxies);
+        log.info("Fetched {} proxies", saved.size());
     }
 
     private ProxyElement checkExists(ProxyElement p) {
@@ -37,18 +37,19 @@ public class ProxyService {
         return p;
     }
 
-    public List<ProxyResponse> getProxies(Anonymity tier, String code) {
+    public List<ProxyResponse> getProxies(Anonymity tier, String countryCode) {
         List<ProxyElement> proxies;
         Sort sort = Sort.by(Sort.Direction.DESC, "lastChecked");
-        if (tier == null && code == null) {
+        if (tier == null && countryCode == null) {
             proxies = repo.findAll(sort);
         } else if (tier == null) {
-            proxies = repo.findProxyElementsByCode(code, sort);
-        } else if (code == null){
+            proxies = repo.findProxyElementsByCode(countryCode, sort);
+        } else if (countryCode == null){
             proxies = repo.findProxyElementsByAnonymity(tier, sort);
         } else {
-            proxies = repo.findProxyElementsByAnonymityAndCode(tier, code, sort);
+            proxies = repo.findProxyElementsByAnonymityAndCode(tier, countryCode, sort);
         }
+        log.info("✅ Retrieved {} proxies", proxies.size());
         return proxies.stream().map(ProxyElement::asResponse).toList();
     }
 }
