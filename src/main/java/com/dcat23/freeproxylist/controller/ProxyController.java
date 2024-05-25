@@ -22,9 +22,11 @@ public class ProxyController {
     @GetMapping
     ResponseEntity<?> getProxies(
             @RequestParam(required = false) Anonymity tier,
-            @RequestParam(required = false) String code
+            @RequestParam(required = false) String code,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int limit
     ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(service.getProxies(tier, code));
+                .body(service.getProxies(tier, code, page, limit));
     }
 }
