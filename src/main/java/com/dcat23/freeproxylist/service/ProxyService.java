@@ -25,6 +25,16 @@ public class ProxyService {
 
     ProxyRepository repo;
 
+    public void init() {
+        log.info("Initialize proxies");
+        List<ProxyElement> proxies = scrape()
+                .stream()
+                .filter(ProxyElement.distinctByAddress())
+                .toList();
+        List<ProxyElement> saved = repo.saveAll(proxies);
+        log.info("{} initial proxies", saved.size());
+    }
+
     public void fetch() {
         log.info("Fetching proxies");
         List<ProxyElement> proxies = scrape()

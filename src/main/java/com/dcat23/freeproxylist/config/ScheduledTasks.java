@@ -25,6 +25,11 @@ public class ScheduledTasks {
     }
 
     @PostConstruct
+    public void initProxies() {
+        service.init();
+    }
+
+
     @Scheduled(fixedRate = (ONE_HOUR / 6))
     public void updateEveryTenMinutes() {
         service.fetch();

@@ -11,7 +11,7 @@
 
     <groupId>com.dcat23</groupId>
     <artifactId>free-proxy-list</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.1-pagination</version>
 
     <name>free-proxy-list</name>
     <description>free-proxy-list</description>
