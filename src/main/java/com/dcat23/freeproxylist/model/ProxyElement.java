@@ -8,6 +8,8 @@ import lombok.*;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @Entity
@@ -72,5 +74,10 @@ public class ProxyElement {
           port,
           url
         );
+    }
+
+    public static java.util.function.Predicate<ProxyElement> distinctByAddress() {
+        Set<String> seen = ConcurrentHashMap.newKeySet();
+        return proxy -> seen.add(proxy.getIpAddress());
     }
 }

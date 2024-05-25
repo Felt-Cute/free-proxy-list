@@ -29,6 +29,7 @@ public class ProxyService {
         log.info("Fetching proxies");
         List<ProxyElement> proxies = scrape()
                 .stream()
+                .filter(ProxyElement.distinctByAddress())
                 .map(this::checkExists)
                 .toList();
         List<ProxyElement> saved = repo.saveAll(proxies);
