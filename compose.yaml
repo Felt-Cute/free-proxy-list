@@ -15,17 +15,17 @@ services:
       - postgres
     restart: unless-stopped
 
-  fpl:
-    image: macchiato23/free-proxy-list:0.0.1-pagination
-    container_name: free-proxy-list
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    networks:
-      - postgres
-    depends_on:
-      - postgres
+#  fpl:
+#    image: macchiato23/free-proxy-list:0.0.1-pagination
+#    container_name: free-proxy-list
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+#    networks:
+#      - postgres
+#    depends_on:
+#      - postgres
 
 networks:
   postgres:
