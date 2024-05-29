@@ -59,10 +59,11 @@ To run this project with docker, you will need to add the following environment 
 ---
 
 ## Acknowledgements
+* [Page/Sort](https://www.baeldung.com/spring-data-jpa-pagination-sorting)
+* [Proxy Server Settings](https://www.shellhacks.com/linux-proxy-server-settings-set-proxy-command-line/)
 
 ---
 
 ## Documentation
-[transmission](https://github.com/transmission/transmission/tree/main)
 
 ---

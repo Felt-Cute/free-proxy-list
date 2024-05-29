@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
 
   fpl:
-    image: macchiato23/free-proxy-list:0.0.1
+    image: macchiato23/free-proxy-list:0.0.1-pagination
     container_name: free-proxy-list
     ports:
       - "8080:8080"

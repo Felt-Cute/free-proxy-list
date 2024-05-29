@@ -1,6 +1,7 @@
 package com.dcat23.freeproxylist.config;
 
 import com.dcat23.freeproxylist.service.ProxyService;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +23,12 @@ public class ScheduledTasks {
     public void updateDaily() {
 
     }
+
+    @PostConstruct
+    public void initProxies() {
+        service.init();
+    }
+
 
     @Scheduled(fixedRate = (ONE_HOUR / 6))
     public void updateEveryTenMinutes() {

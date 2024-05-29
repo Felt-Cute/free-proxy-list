@@ -2,10 +2,14 @@ package com.dcat23.freeproxylist.service;
 
 import com.dcat23.freeproxylist.dto.Anonymity;
 import com.dcat23.freeproxylist.dto.ProxyResponse;
+import com.dcat23.freeproxylist.dto.RestProxyResponse;
 import com.dcat23.freeproxylist.model.ProxyElement;
 import com.dcat23.freeproxylist.repository.ProxyRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +25,25 @@ public class ProxyService {
 
     ProxyRepository repo;
 
+    public void init() {
+        log.info("Initialize proxies");
+        List<ProxyElement> proxies = scrape()
+                .stream()
+                .filter(ProxyElement.distinctByAddress())
+                .toList();
+        List<ProxyElement> saved = repo.saveAll(proxies);
+        log.info("{} initial proxies", saved.size());
+    }
+
     public void fetch() {
         log.info("Fetching proxies");
         List<ProxyElement> proxies = scrape()
                 .stream()
+                .filter(ProxyElement.distinctByAddress())
                 .map(this::checkExists)
                 .toList();
-        repo.saveAll(proxies);
-        log.info("Fetched proxies");
+        List<ProxyElement> saved = repo.saveAll(proxies);
+        log.info("Fetched {} proxies", saved.size());
     }
 
     private ProxyElement checkExists(ProxyElement p) {
@@ -37,18 +52,30 @@ public class ProxyService {
         return p;
     }
 
-    public List<ProxyResponse> getProxies(Anonymity tier, String code) {
-        List<ProxyElement> proxies;
-        Sort sort = Sort.by(Sort.Direction.DESC, "lastChecked");
-        if (tier == null && code == null) {
-            proxies = repo.findAll(sort);
+    public RestProxyResponse getProxies(Anonymity tier, String countryCode, int page, int limit) {
+        Page<ProxyElement> proxyPage;
+        Sort sort = Sort.by("lastChecked").descending();
+        Pageable pageable = PageRequest.of(page, limit, sort);
+
+        if (tier == null && countryCode == null) {
+            proxyPage = repo.findAll(pageable);
         } else if (tier == null) {
-            proxies = repo.findProxyElementsByCode(code, sort);
-        } else if (code == null){
-            proxies = repo.findProxyElementsByAnonymity(tier, sort);
+            proxyPage = repo.findProxyElementsByCode(countryCode, pageable);
+        } else if (countryCode == null){
+            proxyPage = repo.findProxyElementsByAnonymity(tier, pageable);
         } else {
-            proxies = repo.findProxyElementsByAnonymityAndCode(tier, code, sort);
+            proxyPage = repo.findProxyElementsByAnonymityAndCode(tier, countryCode, pageable);
         }
-        return proxies.stream().map(ProxyElement::asResponse).toList();
+        List<ProxyResponse> proxyList = proxyPage.getContent().stream()
+                .map(ProxyElement::asResponse)
+                .toList();
+
+        log.info("✅ Retrieved {} proxies", proxyList.size());
+        return new RestProxyResponse(
+                proxyList,
+                proxyPage.getNumber(),
+                proxyPage.getTotalElements(),
+                proxyPage.getTotalPages()
+        );
     }
 }
