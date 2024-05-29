@@ -7,6 +7,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
 @EnableScheduling
 @AllArgsConstructor
@@ -25,13 +27,12 @@ public class ScheduledTasks {
     }
 
     @PostConstruct
-    public void initProxies() {
-        service.init();
+    public void initialFetch() {
+        CompletableFuture.runAsync(service::init);
     }
-
 
     @Scheduled(fixedRate = (ONE_HOUR / 6))
     public void updateEveryTenMinutes() {
-        service.fetch();
+        CompletableFuture.runAsync(service::fetch);
     }
 }

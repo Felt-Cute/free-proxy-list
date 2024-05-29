@@ -23,27 +23,35 @@ import static com.dcat23.freeproxylist.scraper.Scraper.*;
 @AllArgsConstructor
 public class ProxyService {
 
-    ProxyRepository repo;
+    private ProxyRepository repo;
 
     public void init() {
         log.info("Initialize proxies");
+        List<ProxyElement> saved = this.doInit();
+        log.info("{} initial proxies", saved.size());
+    }
+
+    private List<ProxyElement> doInit() {
         List<ProxyElement> proxies = scrape()
                 .stream()
                 .filter(ProxyElement.distinctByAddress())
                 .toList();
-        List<ProxyElement> saved = repo.saveAll(proxies);
-        log.info("{} initial proxies", saved.size());
+        return repo.saveAll(proxies);
     }
 
     public void fetch() {
-        log.info("Fetching proxies");
+        log.info("🍳Fetching proxies");
+        List<ProxyElement> saved = this.doFetch();
+        log.info("Fetched {} proxies", saved.size());
+    }
+
+    private List<ProxyElement> doFetch() {
         List<ProxyElement> proxies = scrape()
                 .stream()
                 .filter(ProxyElement.distinctByAddress())
                 .map(this::checkExists)
                 .toList();
-        List<ProxyElement> saved = repo.saveAll(proxies);
-        log.info("Fetched {} proxies", saved.size());
+        return repo.saveAll(proxies);
     }
 
     private ProxyElement checkExists(ProxyElement p) {
