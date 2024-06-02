@@ -79,9 +79,4 @@ public class ProxyElement {
           url
         );
     }
-
-    public static java.util.function.Predicate<ProxyElement> distinctByAddress() {
-        Set<String> seen = ConcurrentHashMap.newKeySet();
-        return proxy -> seen.add(proxy.getIpAddress());
-    }
 }
