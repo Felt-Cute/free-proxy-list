@@ -4,6 +4,7 @@ import com.dcat23.freeproxylist.dto.Anonymity;
 import com.dcat23.freeproxylist.dto.ProxyResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.http.client.utils.URIBuilder;
 
 import java.net.*;
 import java.time.LocalDateTime;
@@ -32,7 +33,10 @@ public class ProxyElement {
 
     public String getUrl() throws MalformedURLException {
         String protocol = "http" + (https ? "s" : "");
-        return new URL(protocol, ipAddress, port, "")
+        return new URIBuilder()
+                .setScheme(protocol)
+                .setHost(ipAddress)
+                .setPort(port)
                 .toString();
     }
 
