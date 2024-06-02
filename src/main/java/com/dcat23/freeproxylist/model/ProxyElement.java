@@ -9,8 +9,6 @@ import org.apache.http.client.utils.URIBuilder;
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @Entity
