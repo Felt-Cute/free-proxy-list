@@ -25,39 +25,18 @@ public class ProxyService {
 
     private ProxyRepository repo;
 
-    public void init() {
-        log.info("Initialize proxies");
-        List<ProxyElement> saved = this.doInit();
-        log.info("{} initial proxies", saved.size());
-    }
-
-    private List<ProxyElement> doInit() {
-        List<ProxyElement> proxies = scrape()
-                .stream()
-                .filter(ProxyElement.distinctByAddress())
-                .toList();
-        return repo.saveAll(proxies);
-    }
-
     public void fetch() {
         log.info("🍳Fetching proxies");
-        List<ProxyElement> saved = this.doFetch();
-        log.info("Fetched {} proxies", saved.size());
-    }
-
-    private List<ProxyElement> doFetch() {
-        List<ProxyElement> proxies = scrape()
-                .stream()
-                .filter(ProxyElement.distinctByAddress())
+        List<ProxyElement> saved = scrape().stream()
                 .map(this::checkExists)
                 .toList();
-        return repo.saveAll(proxies);
+        log.info("Fetched {} proxies", saved.size());
     }
 
     private ProxyElement checkExists(ProxyElement p) {
         Optional<ProxyElement> byIpAddress = repo.findByIpAddress(p.getIpAddress());
         byIpAddress.ifPresent(proxyElement -> p.setId(proxyElement.getId()));
-        return p;
+        return repo.save(p);
     }
 
     public RestProxyResponse getProxies(Anonymity tier, String countryCode, int page, int limit) {

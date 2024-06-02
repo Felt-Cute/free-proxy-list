@@ -4,12 +4,11 @@ import com.dcat23.freeproxylist.dto.Anonymity;
 import com.dcat23.freeproxylist.dto.ProxyResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.http.client.utils.URIBuilder;
 
 import java.net.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @Entity
@@ -32,7 +31,10 @@ public class ProxyElement {
 
     public String getUrl() throws MalformedURLException {
         String protocol = "http" + (https ? "s" : "");
-        return new URL(protocol, ipAddress, port, "")
+        return new URIBuilder()
+                .setScheme(protocol)
+                .setHost(ipAddress)
+                .setPort(port)
                 .toString();
     }
 
@@ -74,10 +76,5 @@ public class ProxyElement {
           port,
           url
         );
-    }
-
-    public static java.util.function.Predicate<ProxyElement> distinctByAddress() {
-        Set<String> seen = ConcurrentHashMap.newKeySet();
-        return proxy -> seen.add(proxy.getIpAddress());
     }
 }
