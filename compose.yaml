@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
 
 #  fpl:
-#    image: macchiato23/free-proxy-list:0.0.1-pagination
+#    image: macchiato23/free-proxy-list:0.0.1-dev4
 #    container_name: free-proxy-list
 #    ports:
 #      - "8080:8080"
