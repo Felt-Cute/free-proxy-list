@@ -20,8 +20,6 @@ public class ScheduledTasks {
 
     private final ProxyService service;
 
-    private final Lock lock = new ReentrantLock();
-
     /**
      * Will be executed daily at 2:26 PM
      */
@@ -30,26 +28,8 @@ public class ScheduledTasks {
 
     }
 
-    @PostConstruct
-    public void initialFetch() {
-        CompletableFuture.runAsync(service::init);
-    }
-
-    @Scheduled(
-            fixedRate = (ONE_HOUR / 6),
-            initialDelay = (ONE_HOUR / 6)
-    )
+    @Scheduled(fixedRate = (ONE_HOUR / 6))
     public void updateEveryTenMinutes() {
-        CompletableFuture.runAsync(() -> {
-            if (lock.tryLock()) {
-                try {
-                    service.fetch();
-                } finally {
-                    lock.unlock();
-                }
-            } else {
-                System.out.println("Previous fetch is still running, skipping this execution.");
-            }
-        });
+        CompletableFuture.runAsync(service::fetch);
     }
 }
