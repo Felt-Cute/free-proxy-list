@@ -2,6 +2,7 @@ package com.dcat23.freeproxylist.scraper;
 
 import com.dcat23.freeproxylist.dto.Anonymity;
 import com.dcat23.freeproxylist.model.ProxyElement;
+import lombok.extern.slf4j.Slf4j;
 import org.htmlunit.WebClient;
 import org.htmlunit.html.*;
 
@@ -10,14 +11,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class Scraper {
     private static final String BASE_URL = "https://free-proxy-list.net/";
     private static final String TABLE_SELECTOR = "#list > div > div.table-responsive > div > table > tbody";
 
     public static List<ProxyElement> scrape() {
+        log.debug("Scraper start");
         HtmlTableBody table = getPage().querySelector(TABLE_SELECTOR);
         DomNodeList<HtmlElement> rows = table.getElementsByTagName("tr");
-        return rows.stream()
+        log.debug("Extracting elements");
+        return rows.subList(0,100)
+                .stream()
                 .map(Scraper::extractRow)
                 .toList();
     }
